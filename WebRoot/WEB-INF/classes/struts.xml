@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<!-- 用户登录 Action-->
+	<package name="UserLogin" namespace="/" extends="struts-default">
+		<action name="login" class="login" method="login">
+			<result name="login_success">/index.jsp</result>
+			<result name="login_failure">/login.html</result>
+			<result name="error">/login.html</result>
+			<result name="studentlogin_success">student/student_index.jsp</result>
+			<result name="teacherlogin_success">teacher/teacher_index.jsp</result>
+		</action>
+
+		<action name="loginout" class="login" method="loginout">
+			<result name="loginOut_success">/login.html</result>
+		</action>
+		
+	</package>
+	
+	<package name="user" namespace="/admin" extends="struts-default">
+	<action name="saveUserAction" class="login" method="saveUser">
+			<result name="saveAdmin_success">/index.jsp</result>
+	</action>
+	</package>
+
+	<!-- 学生Action -->
+	<package name="student" namespace="/student" extends="struts-default">
+	<!-- 查询所有学生action -->
+		<action name="studentAction" class="studentAction" method="findStudentPage">
+			<result name="findStudentPage_success">/student/student_find_success.jsp</result>
+		</action>
+		<!-- 增加学生action -->
+		<action name="addStudentAction" class="studentAction" method="addStudent">
+		<result name="addStudent_success" type="redirectAction">studentAction</result>
+		</action>
+		<!-- 通过id查询学生并编辑 -->
+		<action name="findStudentById" class="studentAction" method="editStudent">
+		<result name="editStudent_success">/student/edit_student.jsp</result>
+		</action>
+		<!-- 通过学生学号查询 -->
+		<action name="findStudentByStudentId" class="studentAction" method="editStudentByStudentId">
+		<result name="editStudentByStudentId_success">/student/edit_student.jsp</result>
+		</action>
+		<!-- 删除学生acting -->
+		<action name="deleteStudentById" class="studentAction" method="deleteStudent">
+		<result name="deleteStudent_success" type="redirectAction">studentAction</result>
+		</action>
+		<!-- 更新学生信息action -->
+		<action name="updateStudentAction" class="studentAction" method="updateStudent">
+		<result name="updateStudent_success" type="redirectAction">studentAction</result>
+		</action>
+		
+	</package>
+	
+	<!-- 老师Action -->
+	<package name="teacher" namespace="/teacher" extends="struts-default">
+	<!-- 增加老师信息action -->
+		<action name="addTeacherAction" class="teacherAction" method="addTeacher">
+		<result name="addTeacher_success" type="redirectAction">TeacherAction</result>
+		</action>
+		<!-- 查询显示所有老师action -->
+		<action name="TeacherAction" class="teacherAction" method="findTeacherPage">
+		<result name="findTeacherPage_success">/teacher/teacher_find_success.jsp</result>
+		</action>
+		<!-- 编辑老师信息action -->
+		<action name="editTeacherAction" class="teacherAction" method="editTeacher">
+		<result name="editTeacher_success">/teacher/edit_teacher.jsp</result>
+		</action>
+		<!-- 更新老师信息acting -->
+		<action name="updateTeacherAction" class="teacherAction" method="updateTeacher">
+		<result name="updateTeacher_success" type="redirectAction">TeacherAction</result>
+		</action>
+		<!-- 删除老师信息action -->
+		<action name="deleteTeacherAction" class="teacherAction" method="deleteTeacher">
+		<result name="deleteTeacher_success" type="redirectAction">TeacherAction</result>
+		</action>
+	</package>
+	
+	<!-- 课程Action -->
+	<package name="course" extends="struts-default" namespace="/course">
+	<action name="course_*" class="courseAction" method="{1}">
+	<result name="findCourse_success">/course/show_course.jsp</result>
+	<result name="editCourse_success">/course/edit_course.jsp</result>
+	<result name="addCourse_success" type="redirectAction">course_findCoursePage</result>
+	<result name="updateCourse_success" type="redirectAction">course_findCoursePage</result>
+	<result name="deleteCourse_success" type="redirectAction">course_findCoursePage</result>
+	</action>
+	</package>
+
+	<!-- 验证码 -->
+	<package name="Security" namespace="/Security" extends="struts-default">
+		<action name="SecurityCodeImageAction" class="securityCodeImageAction">
+			<result name="success" type="stream">
+				<param name="contentType">image/jpeg</param>
+				<param name="inputName">imageStream</param>
+				<param name="bufferSize">2048</param>
+			</result>
+		</action>
+	</package>
+
+</struts>    

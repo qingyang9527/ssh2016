@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url" value="jdbc:mysql://localhost:3306/exam_jsp">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="sss22219"></property>
+	</bean>
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+			</props>
+		</property>
+		<property name="mappingResources">
+			<list>
+				<value>vo/Teacher.hbm.xml</value>
+				<value>vo/Student.hbm.xml</value>
+				<value>vo/User.hbm.xml</value>
+				<value>vo/Course.hbm.xml</value></list>
+		</property></bean>
+	<!-- 配置工具类 -->
+	<bean id="securityCode" class="util.SecurityCode"></bean>
+	<bean id="securityImage" class="util.SecurityImage"></bean>
+	
+	
+	<!-- 配置dao层的类 -->
+	<bean id="baseDAO" class="dao.BaseDAO">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="studentDAO" class="dao.impl.StudentDAO" parent="baseDAO"></bean>
+	
+	<bean id="teacherDAO" class="dao.impl.TeacherDAO" parent="baseDAO"></bean>
+
+	<bean id="userDAO" class="dao.impl.UserDAO" parent="baseDAO"></bean>
+	
+	<bean id="courseDAO" class="dao.impl.CourseDAO" parent="baseDAO"></bean>
+
+	<!-- 配置业务层的类 -->
+	<bean id="userService" class="service.impl.UserService">
+		<property name="userDAO" ref="userDAO"></property>
+	</bean>
+
+	<bean id="studentService" class="service.impl.StudentService">
+		<property name="studentDAO" ref="studentDAO"></property>
+	</bean>
+	
+	<bean id="teacherService" class="service.impl.TeacherService">
+		<property name="teacherDAO" ref="teacherDAO"></property>
+	</bean>
+	
+	<bean id="courseService" class="service.impl.CourseService">
+		<property name="courseDAO" ref="courseDAO"></property>
+	</bean>
+
+	<!-- 配置Action的类 -->
+	<bean id="login" class="action.LoginAction">
+		<property name="userService" ref="userService"></property>
+		<property name="studentService" ref="studentService"></property>
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+
+	<bean id="studentAction" class="action.StudentAction">
+		<property name="studentService" ref="studentService"></property>
+	</bean>
+	
+	<bean id="teacherAction" class="action.TeacherAction">
+		<property name="teacherService" ref="teacherService"></property>
+	</bean>
+	
+	<bean id="courseAction" class="action.CourseAction">
+		<property name="courseService" ref="courseService"></property>
+	</bean>
+	
+
+	<bean id="securityCodeImageAction" class="action.SecurityCodeImageAction">
+	</bean>
+	
+
+</beans>
